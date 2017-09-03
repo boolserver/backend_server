@@ -11,7 +11,7 @@ int main(){
             continue;
         }
 
-        char* filename = get_json_file_from_frontend(uuid_str);
+        char* filename = main_client_for_frontend_json(uuid_str);
 
         char* output_filename = malloc(strlen(filename) - 1);
         strcpy(output_filename, TEMP_DATA_DIR);
