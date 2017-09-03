@@ -27,6 +27,12 @@ int main(){
         
         printf("Status -> %i\n", status);
 
+        if(status == 0){
+            main_send_result(uuid_str, output_filename);
+            printf("Sent data to frontend\n");
+        }
+        else{printf("\nError: Not sending FILE\n");}
+
         break;
     }
 }
