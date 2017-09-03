@@ -1,6 +1,6 @@
 #include "client_for_msg_queue.h"
 
-int init_sockfd(){ 
+int init_sockfd(int port, char* server_ip_addr){ 
     int sockfd = 0;
     if((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0){ 
         printf("\nERROR: Could not create socket\n");
@@ -9,8 +9,8 @@ int init_sockfd(){
         
     struct sockaddr_in serv_addr;
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(PORT);
-    serv_addr.sin_addr.s_addr = inet_addr(SERVER_IP_ADDR);
+    serv_addr.sin_port = htons(port);
+    serv_addr.sin_addr.s_addr = inet_addr(server_ip_addr);
 
     if(connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0){ 
         printf("\nERROR : Connect Failed\n\n");
@@ -39,7 +39,7 @@ char* get_uuid_str_from_msg_queue(int sockfd){
 }
 
 char* main_client_for_msg_queue(){
-    int sockfd = init_sockfd();
+    int sockfd = init_sockfd(PORT, SERVER_IP_ADDR);
     char* uuid_str = get_uuid_str_from_msg_queue(sockfd);
 
     return uuid_str;
