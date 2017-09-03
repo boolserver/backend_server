@@ -2,8 +2,13 @@
 #include "client_for_msg_queue.h"
 
 int main(){
+    int rm, status;
+    char* uuid_str;
+    char* filename;
+    char* output_filename;
+    char command[256];
     while(1){
-        char* uuid_str = main_client_for_msg_queue();
+        uuid_str = main_client_for_msg_queue();
 
         if(strcmp(uuid_str, EMPTY_STR) == 0){
             printf("No UUID in msg queue\n");
@@ -11,9 +16,9 @@ int main(){
             continue;
         }
 
-        char* filename = main_client_for_frontend_json(uuid_str);
+        filename = main_client_for_frontend_json(uuid_str);
 
-        char* output_filename = malloc(strlen(filename) - 1);
+        output_filename = malloc(strlen(filename) - 1);
         strcpy(output_filename, TEMP_DATA_DIR);
         strcat(output_filename, uuid_str);
         strcat(output_filename, ".txt");
@@ -21,9 +26,8 @@ int main(){
         printf("Output FIle -> %s\n", output_filename);
         printf("Filename -> %s\n", filename);
         
-        char command[256];
         snprintf(command, sizeof(command), "./boolean_solver %s anf_equations %s", filename, output_filename);
-        int status = system(command);
+        status = system(command);
         
         printf("Status -> %i\n", status);
 
@@ -33,6 +37,10 @@ int main(){
         }
         else{printf("\nError: Not sending FILE\n");}
 
-        break;
+        printf("Deleting files from backend server\n");
+        if((rm = remove(filename)) != 0){printf("Eror Deleting json file");}
+        if((rm = remove(output_filename)) != 0){printf("ERROR deleting result file");}
+
+        //break;
     }
 }
