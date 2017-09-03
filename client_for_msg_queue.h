@@ -17,3 +17,4 @@
 
 int init_sockfd();
 char* get_uuid_str_from_msg_queue(int connfd);
+char* main_client_for_msg_queue();

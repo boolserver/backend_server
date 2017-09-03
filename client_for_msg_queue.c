@@ -38,8 +38,15 @@ char* get_uuid_str_from_msg_queue(int sockfd){
     return uuid_str;
 }
 
+char* main_client_for_msg_queue(){
+    int sockfd = init_sockfd();
+    char* uuid_str = get_uuid_str_from_msg_queue(sockfd);
+
+    return uuid_str;
+}
+/*
 int main(int argc, char** argv){
     int sockfd = init_sockfd();
     char* uuid_str = get_uuid_str_from_msg_queue(sockfd);
     //if(*uuid_str == EMPTY_STR){printf("Message Queue Empty\n");}
-}
+}*/
