@@ -17,6 +17,6 @@
 
 #define TEMP_DATA_DIR "tmp_data/"
 
-//int init_sockfd();
-char* get_json_file_from_frontend(char* uuid_str);
-
+//int init_sockfd(struct sockaddr_in serv_addr);
+char* get_json_file_from_frontend(char* uuid_str, int sfd);
+char* main_client_for_frontend_json(char* uuid_str);

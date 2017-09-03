@@ -1,40 +1,12 @@
 #include "client_for_frontend.h"
-/*
-int init_sockfd(struct sockaddr_in serv_addr){
-    int sfd = 0;
+#include "client_for_msg_queue.h"
 
-    sfd = socket(AF_INET, SOCK_STREAM, 0);
-
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(PORT_FRONTBACK_END);
-    serv_addr.sin_addr.s_addr = inet_addr(SERVER_IP_ADDR);
-    
-    return sfd;
-}
-*/
-char* get_json_file_from_frontend(char* uuid_str){
-    int sfd = 0;
-
-    struct sockaddr_in serv_addr;
-    sfd = socket(AF_INET, SOCK_STREAM, 0);
-
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(PORT_FRONTBACK_END);
-    serv_addr.sin_addr.s_addr = inet_addr(SERVER_IP_ADDR);
+char* get_json_file_from_frontend(char* uuid_str, int sfd){
+    printf("Connection setup\n");
     
     int n=0, b, tot;
     char rbuff[BUF_SIZE + 1]; 
     memset(rbuff, '0', sizeof(rbuff));
-    //char sendbuffer[BUF_SIZE];
-    
-    //int sfd = init_sockfd(serv_addr);
-
-    b=connect(sfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
-    if (b==-1) {
-        perror("Connect");
-        //return "1";
-    }
-    printf("Connection setup\n");
 
     //sending UUID str
     send(sfd, uuid_str, UUID_SIZE_FOR_STR, 0);
@@ -70,6 +42,14 @@ char* get_json_file_from_frontend(char* uuid_str){
     return filename;
     
 }
+
+char* main_client_for_frontend_json(char* uuid_str){
+    int sfd = init_sockfd(PORT_FRONTBACK_END, SERVER_IP_ADDR);
+    char* filename = get_json_file_from_frontend(uuid_str, sfd);
+
+    return filename;
+}
+
 /*
 int main(int argc, char** argv){
     printf("Starting client\n");
