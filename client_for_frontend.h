@@ -20,3 +20,6 @@
 //int init_sockfd(struct sockaddr_in serv_addr);
 char* get_json_file_from_frontend(char* uuid_str, int sfd);
 char* main_client_for_frontend_json(char* uuid_str);
+
+void send_result_to_frontend(int sfd, char* uuid_str, char* output_filename);
+void main_send_result(char* uuid_str, char* output_filename);

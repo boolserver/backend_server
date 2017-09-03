@@ -8,6 +8,10 @@ char* get_json_file_from_frontend(char* uuid_str, int sfd){
     char rbuff[BUF_SIZE + 1]; 
     memset(rbuff, '0', sizeof(rbuff));
 
+    //Sending Mode
+    char mode = 'j';
+    write(sfd, &mode, sizeof(char));
+
     //sending UUID str
     send(sfd, uuid_str, UUID_SIZE_FOR_STR, 0);
     printf("UUID send\n");
@@ -37,6 +41,7 @@ char* get_json_file_from_frontend(char* uuid_str, int sfd){
 
     printf("UUID for the file->%s\n", uuid_str);
 
+    sleep(1);
     close(sfd);
 
     return filename;
@@ -48,6 +53,40 @@ char* main_client_for_frontend_json(char* uuid_str){
     char* filename = get_json_file_from_frontend(uuid_str, sfd);
 
     return filename;
+}
+
+void send_result_to_frontend(int sfd, char* uuid_str, char* output_filename){
+    int n=0, b, tot;
+    char rbuff[BUF_SIZE]; 
+    memset(rbuff, '0', sizeof(rbuff));
+
+    //Sending Mode
+    char mode = 'r';
+    write(sfd, &mode, sizeof(char));
+
+    //Sending UUID
+    send(sfd, uuid_str, UUID_SIZE_FOR_STR, 0);
+    printf("UUID send\n");
+
+    FILE *fp = fopen(output_filename, "rb");
+    tot=0;
+    if(fp != NULL){
+        while((b = fread(rbuff, 1, sizeof(rbuff), fp)) > 0){ 
+            send(sfd, rbuff, b, 0); 
+        }
+        if (fclose(fp)) { printf("error closing file."); exit(-1); }
+        printf("No error in closing file or sending file\n");
+    } else {
+        printf("ERROR in FILE\n");
+    }
+
+    sleep(1);
+    close(sfd);
+}
+
+void main_send_result(char* uuid_str, char* output_filename){
+    int sfd = init_sockfd(PORT_FRONTBACK_END, SERVER_IP_ADDR);
+    send_result_to_frontend(sfd, uuid_str, output_filename);
 }
 
 /*
