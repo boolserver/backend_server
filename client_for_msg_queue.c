@@ -32,7 +32,8 @@ char* get_uuid_str_from_msg_queue(int sockfd){
     }
 
     printf("UUID read as -> %s\n", uuid_str);
-
+    
+    sleep(1);
     close(sockfd);
 
     return uuid_str;
